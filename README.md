@@ -7,6 +7,13 @@
     $ go get github.com/satori/go.uuid
     $ go get goji.io
     $ make build
+
+Start with
+    $ ./startup.sh
+
+Stop with
+    $ ./shutdown.sh
+
 ```
 ## Supported Email Providers
 
