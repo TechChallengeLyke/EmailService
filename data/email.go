@@ -66,3 +66,22 @@ func GetMails(from int, number int) *[]Email {
 	}
 	return &mails
 }
+
+//returns number of in progress, failures, successes
+func GetMailMetrics() (int,int,int) {
+	in_progress := 0
+	failures := 0
+	success := 0
+	for _, mail := range dataStore {
+		if mail.Status == CREATED {
+			in_progress++
+		}
+		if mail.Status == FAILURE {
+			failures++
+		}
+		if mail.Status == SUCCESS {
+			success++
+		}
+	}
+	return in_progress, failures, success
+}

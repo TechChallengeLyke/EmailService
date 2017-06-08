@@ -63,6 +63,7 @@ func setupRouting() {
 	mux.HandleFunc(pat.Get("/getmails/:number"), handler.GetMails)
 	mux.HandleFunc(pat.Get("/getmails/:number/:from"), handler.GetMailsWithStartingPoint)
 	mux.HandleFunc(pat.Get("/status"), func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("OK")) })
+	mux.HandleFunc(pat.Get("/metrics"), handler.GetMetrics)
 	//just for the web page, not part of the API
 	mux.HandleFunc(pat.Get("/list.html"), handler.ShowGetMails)
 	mux.Handle(pat.Get("/*"), http.FileServer(http.Dir(filepath.Join(".", "public"))))

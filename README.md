@@ -10,12 +10,8 @@
 ```
 ## Supported Email Providers
 
-SendGrid<br/>
-MailGun
-
-## Installation Notes
-
-> source config.sh<br/>
+*SendGrid*<br/>
+*MailGun*
 
 ## Architecture
 
@@ -51,7 +47,7 @@ not make a lot of sense to put more effort into the tests than into the actual c
 
 To run the tests:
 
-`go test ./...
+`   go test ./...
 
 ## API Documentation
 ----
@@ -92,10 +88,12 @@ To run the tests:
 
 * **Error Responses:**
 
-  * **Code:** 401 UNAUTHORIZED <br />
+  * **Code:** 401 UNAUTHORIZED <br/>
 
-  * **Code:** 400 BAD REQUEST <br />
+  * **Code:** 400 BAD REQUEST <br/>
     **Content:** `{ error : "error message goes here" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br/>
 
 * **Sample Call:**
 
@@ -104,3 +102,103 @@ To run the tests:
     $ curl -H "Content-Type: application/json" -X POST -d '{"FromName":"Tester", "FromAddress":"test@testing.com", "ToName":"John", "ToAddress":"johnf43@gmx.net", "Subject":"Testmail", "BodyText":"This is a test mail from curl"}' http://localhost:8000/sendmail
 ```
 
+----
+### Get Emails
+----
+  Get a list of all sent emails and their status
+
+* **URL**
+
+  /getmails/:number/:from
+
+* **Method:**
+
+  GET
+
+* **URL Params**
+
+  **Required**
+```
+  	number         = [int]
+
+  **Optional**
+
+    from           = [int]
+```
+
+* **Success Response:**
+
+  * **Code:** 200 <br/>
+    **Content:** json with the mails<br/>
+
+* **Error Responses:**
+
+  * **Code:** 401 UNAUTHORIZED <br/>
+
+  * **Code:** 400 BAD REQUEST <br/>
+    **Content:** `{ error : "error message goes here" }`
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br/>
+
+* **Sample Call:**
+
+    on the local machine:
+```
+    $ curl -X GET http://localhost:8000/getmails/1/5
+```
+
+----
+### Status
+----
+  Returns OK for monitoring solutions
+
+* **URL**
+
+  /status
+
+* **Method:**
+
+  GET
+
+* **Success Response:**
+
+  * **Code:** 200 <br/>
+    **Content:** OK<br/>
+
+* **Error Responses:**
+
+* **Sample Call:**
+
+    on the local machine:
+```
+    $ curl -X GET http://localhost:8000/status
+```
+
+----
+### Metrics
+----
+  Returns number of in progress mails, failed mails and successful mails
+
+* **URL**
+
+  /metrics
+
+* **Method:**
+
+  GET
+
+* **Success Response:**
+
+  * **Code:** 200 <br/>
+    **Content:** {"InProgressMails":XXX,"Failures":YYY,"Success":ZZZ}<br/>
+
+* **Error Responses:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br/>
+
+* **Sample Call:**
+
+    on the local machine:
+```
+    $ curl -X GET http://localhost:8000/metrics
+```

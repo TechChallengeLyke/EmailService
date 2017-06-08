@@ -62,6 +62,21 @@ func getMails(w http.ResponseWriter, r *http.Request, from int) {
 	w.Write(json)
 }
 
+func GetMetrics(w http.ResponseWriter, r *http.Request) {
+	in_progress, failure, success := data.GetMailMetrics()
+	metrics := struct {
+		InProgressMails int
+		Failures int
+		Success int
+	}{InProgressMails:in_progress, Failures:failure, Success:success}
+	json, err := json.Marshal(metrics)
+	if err != nil {
+		http.Error(w, "error : "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(json)
+}
+
 func ShowGetMails(w http.ResponseWriter, r *http.Request) {
 	mails := data.GetMails(0, 100)
 	model := struct {
