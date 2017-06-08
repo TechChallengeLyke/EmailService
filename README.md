@@ -2,20 +2,22 @@
 
 ## Setup
 
-    $ go get github.com/sendgrid/sendgrid-go<br />
-    $ go get github.com/mailgun/mailgun-go<br />
-    $ go get github.com/satori/go.uuid<br />
-    $ go get goji.io<br />
-    $ make build<br />
+    ```
+    $ go get github.com/sendgrid/sendgrid-go
+    $ go get github.com/mailgun/mailgun-go
+    $ go get github.com/satori/go.uuid
+    $ go get goji.io
+    $ make build
+    ```
 
 ## Supported Email Providers
 
-SendGrid
+SendGrid<br/>
 MailGun
 
 ## Installation Notes
 
-> source config.sh<br />
+> source config.sh<br/>
 
 ## Architecture
 
@@ -23,7 +25,7 @@ MailGun
 
 ## API Documentation
 ----
-###Send Email
+### Send Email
 ----
   Send email via the supported email providers (html and/or text mail supported)
 
@@ -38,17 +40,21 @@ MailGun
 * **Data Params**
 
   **Required**
-
-  	`FromName       = [alphanumeric]`<br />
-  	`FromAddress    = [alphanumeric]`<br />
-  	`Subject        = [alphanumeric]`<br />
-  	`ToName         = [alphanumeric]`<br />
-  	`ToAddress      = [alphanumeric]`<br />
-<br />
+    ```
+  	FromName       = [alphanumeric]
+  	FromAddress    = [alphanumeric]
+  	Subject        = [alphanumeric]
+  	ToName         = [alphanumeric]
+  	ToAddress      = [alphanumeric]
+  	```
+<br/>
   	One or both of
-<br />
-  	`BodyText       = [alphanumeric]`<br />
-    `BodyHtml       = [alphanumeric]`<br />
+<br/>
+
+    ```
+  	BodyText       = [alphanumeric]
+    BodyHtml       = [alphanumeric]
+    ```
 
 * **Success Response:**
 
