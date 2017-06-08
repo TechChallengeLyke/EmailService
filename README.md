@@ -26,6 +26,7 @@ The API has a frontend component, which contains function calls to
 - get a list of sent emails
 - a simple status function (for monitoring)
 - a simple call to retrieve some metrics
+
 The most important/complex call is the sendMail call.
 After passing through the routing, which is done with the help of [goji.io](https://goji.io/), all calls are handled in the handler package,
 which is responsible for unmarshalling and marshalling of input and output values.
@@ -70,10 +71,12 @@ service to ensure confidentiality of the credentials.
 <br/>
   	One or both of
 <br/>
+
 ```
-  	BodyText       = [alphanumeric]
+    BodyText       = [alphanumeric]
     BodyHtml       = [alphanumeric]
 ```
+
 * **Success Response:**
 
   * **Code:** 200 <br />
