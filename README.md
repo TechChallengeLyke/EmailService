@@ -49,6 +49,24 @@ To run the tests:
 
 `   go test ./...
 
+## Considerations/Outlook
+
+**Scalability**: The service is scalable in the sense, that the number of parallel goroutines can be adjusted very easily. The database is of course
+only hinted at right now and would also need to be built in a way, that it could scale with the rest of the service. It might be possible, that some of those
+email providers have limitation on the number of concurrent connections. If that is the case, it needs to be taken care of in the code and would require changes in how
+the work is distributed across the goroutines.
+One improvement for the service could be to adjust the number of goroutines dynamically with the load. Since goroutines are quite cheap that would only
+make sense for some quite extreme cases.
+
+**Features**:
+- If the persistence is fully implemented, it would also make sense to check the db for in progress mails during startup.
+- Most email providers provide feedback, whether a mail was delivered or not and why. This could be retrieved and be used to maintain a blacklist and
+provide useful for other services.
+- Another useful feature for users of this service might be support for attachments.
+- If this service is used to send mails to mailing groups or send out mass mails, a templating feature could be quite useful.
+- ...
+
+
 ## API Documentation
 ----
 ### Send Email
@@ -118,18 +136,18 @@ To run the tests:
 * **URL Params**
 
   **Required**
-```
-  	number         = [int]
 
-  **Optional**
+    number         = [int]
+
+**Optional**
 
     from           = [int]
-```
+
 
 * **Success Response:**
 
   * **Code:** 200 <br/>
-    **Content:** json with the mails<br/>
+    **Content:** array of {"MailId":"XXX","CreatedAt":"YYY","FromName":"ZZZ","FromAddress":"AAA","Subject":"BBB","ToName":"CCC","ToAddress":"DDD","BodyText":"EEE","BodyHtml":"FFFF","Status":"GGG"}}<br/>
 
 * **Error Responses:**
 
