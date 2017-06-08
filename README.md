@@ -58,8 +58,12 @@ the work is distributed across the goroutines.
 One improvement for the service could be to adjust the number of goroutines dynamically with the load. Since goroutines are quite cheap that would only
 make sense for some quite extreme cases.
 
+**Reliability**: If this service is considered crucial in the system, it would be advisable to increase availability in case of hardware/software errors.
+The test deployment runs right now on a single machine behind a nginx webserver. If another machine with this service is added a loadbalancer or a standby solutions is needed.
+If the getmails call is used for anything besides monitoring the current activity a solution to combine the mails from different machines would also be needed.
+
 **Features**:
-- If the persistence is fully implemented, it would also make sense to check the db for in progress mails during startup.
+- If the persistence is fully implemented, it would also make sense to check the db for in progress mails during startup. This way the chance to lose any mails will be greatly reduced.
 - Most email providers provide feedback, whether a mail was delivered or not and why. This could be retrieved and be used to maintain a blacklist and
 provide useful for other services.
 - Another useful feature for users of this service might be support for attachments.
