@@ -68,9 +68,9 @@ service to ensure confidentiality of the credentials.
   	ToName         = [alphanumeric]
   	ToAddress      = [alphanumeric]
 ```
-<br/>
-  	One or both of
-<br/>
+
+    One or both of
+    
 
 ```
     BodyText       = [alphanumeric]
