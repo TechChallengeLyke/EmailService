@@ -6,6 +6,7 @@ import (
 	"github.com/TechChallengeLyke/EmailService/action"
 	"github.com/TechChallengeLyke/EmailService/data"
 	"goji.io/pat"
+	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -59,4 +60,24 @@ func getMails(w http.ResponseWriter, r *http.Request, from int) {
 		return
 	}
 	w.Write(json)
+}
+
+func ShowGetMails(w http.ResponseWriter, r *http.Request) {
+	mails := data.GetMails(0, 100)
+	model := struct {
+		Mails []data.Email
+	}{Mails: *mails}
+
+	renderTemplate(w, "templates/list.html", "list.html", &model)
+}
+
+
+func renderTemplate(w http.ResponseWriter, tmpl string, name string, p interface{}) {
+	t := template.New(name) // Create a template.
+	t, _ = t.ParseFiles(tmpl)      // Parse template file.
+	err := t.Execute(w, p)
+	if err != nil {
+		fmt.Println("error : ", err)
+		http.Error(w, "error : "+err.Error(), http.StatusInternalServerError)
+	}
 }

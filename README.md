@@ -20,7 +20,7 @@ MailGun
 ## Architecture
 
 The Email Service has a layered architecture.
-It contains a few static web pages, but mostly it is centered around the API.
+It contains a couple of web pages, but mostly it is centered around the API.
 The API has a frontend component, which contains function calls to
 - send emails
 - get a list of sent emails
@@ -34,15 +34,24 @@ which is responsible for unmarshalling and marshalling of input and output value
 All the actual logic resides in the action package. Upon receiving a sendMail request, those requests will be checked for validity and if it proves to be
 valid, it will be persisted (that part is only hinted at and not really implemented).
 The usage of the external email provider is decoupled from the sendMail call through the use of a channel.
-A number of goroutines (which can be set as a commandline option) reads all requests from that channel and tries to send those emails via one of the available
+A number of goroutines (the number can be set as a commandline option) read all requests from that channel and try to send those emails via one of the available
 email providers. If it succeeds, the mail will be marked as _SUCCESS_ and the goroutine waits for the next mail. If it fails, it will go through all
 available email providers. If all of them fail, the mail will be marked as _FAILURE_.
 
 ## Security Considerations
 
 The service on it's own does not contain any authentication/authorization. For the test deployment it is only secured by http basic authentication.
-Since the test deployment does not have domain attached, it was not possible to use https, which would be strict requirement for a live deployment of this
+Since the test deployment does not have domain attached, it was not possible to use https, which would be a strict requirement for a live deployment of this
 service to ensure confidentiality of the credentials.
+
+## Tests
+
+The amount of actual logic in this micro service is rather limited. Therefore I also kept the amount of unit tests rather low. I think it usually does
+not make a lot of sense to put more effort into the tests than into the actual code or to waste time writing tests for trivial code.
+
+To run the tests:
+
+`go test ./...
 
 ## API Documentation
 ----
@@ -67,12 +76,11 @@ service to ensure confidentiality of the credentials.
   	Subject        = [alphanumeric]
   	ToName         = [alphanumeric]
   	ToAddress      = [alphanumeric]
-```
+
 
     One or both of
-    
 
-```
+
     BodyText       = [alphanumeric]
     BodyHtml       = [alphanumeric]
 ```

@@ -18,7 +18,7 @@
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/starter-template.css" rel="stylesheet">
+    <link href="../css/starter-template.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -46,23 +46,100 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="../list.html">List of Emails</a></li>
+            <li class="active"><a href="/index.html">Home</a></li>
+            <li><a href="list.html">List of Emails</a></li>
             <li><a href="sendmail.html">Send Email</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
+    <script type="text/javascript">
+        function validate() {
+
+            var serialized = $(document.myform).serializeArray();
+            var s = '';
+            var d = {};
+            for(s in serialized){
+                d[serialized[s]['name']] = serialized[s]['value']
+            }
+            data = JSON.stringify(d);
+
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "/sendmail",
+                contentType: "application/json",
+                dataType: 'json',
+                data:data,
+                success: function() {
+                    alert('success');
+                },
+                statusCode: {
+                    200: function() {
+                        console.log("send successful")
+                        alert("Success");
+                    },
+                    400: function(data) {
+                        console.log(JSON.stringify(data))
+                        alert("Failure: " + data.responseText);
+                    }
+
+                }
+            });
+            console.log(data)
+
+        }
+    </script>
+
     <div class="container">
 
       <div class="starter-template">
-        <h1>Lyke Technical Challenge</h1>
-        <p class="lead"></p>
+        <h1></h1>
+        <p class="lead">
+        <style>td, th {
+          border: 1px solid #999;
+          padding: 1.0rem;
+          }
+        </style>
+        <form name="myform">
+        <table>
+          <thead>
+          <tr>
+            <th class="lead" colspan="2">Send Email</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>From(Name) : </td><td><input type="text" name="FromName"></td>
+            </tr>
+            <tr>
+              <td>From(Address) : </td><td><input type="text" name="FromAddress"></td>
+            </tr>
+            <tr>
+              <td>To(Name) : </td><td><input type="text" name="ToName"></td>
+            </tr>
+            <tr>
+              <td>To(Address) : </td><td><input type="text" name="ToAddress"></td>
+            </tr>
+            <tr>
+              <td>Subject : </td><td><input type="text" name="Subject"></td>
+            </tr>
+            <tr>
+              <td>Body(Text) : </td><td><input type="text" name="BodyText"></td>
+            </tr>
+            <tr>
+              <td>Body(Html) : </td><td><input type="text" name="BodyHtml"></td>
+            </tr>
+          </tbody>
+        </table>
+        <input type="button" value="Send" name="Submit" onclick= "validate()">
+      </form>
+        </p>
       </div>
 
     </div><!-- /.container -->
-
+    <div class="result"></div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -72,5 +149,6 @@
     <script src="../../dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../js/emailservice.js"></script>
   </body>
 </html>

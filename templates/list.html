@@ -18,7 +18,7 @@
     <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/starter-template.css" rel="stylesheet">
+    <link href="../css/starter-template.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -46,8 +46,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="../list.html">List of Emails</a></li>
+            <li class="active"><a href="/index.html">Home</a></li>
+            <li><a href="list.html">List of Emails</a></li>
             <li><a href="sendmail.html">Send Email</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -57,8 +57,42 @@
     <div class="container">
 
       <div class="starter-template">
-        <h1>Lyke Technical Challenge</h1>
-        <p class="lead"></p>
+        <h1></h1>
+        <p class="lead">
+        <style>td, th {
+          border: 1px solid #999;
+          padding: 1.0rem;
+          }
+        </style>
+
+        <table>
+          <thead>
+          <tr>
+            <th class="lead" colspan="5">List of Emails</th>
+          </tr>
+          <tr>
+            <th class="lead">Timestamp</th>
+            <th class="lead">From</th>
+            <th class="lead">To</th>
+            <th class="lead">Subject</th>
+            <th class="lead">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{with .Mails}}
+          {{range .}}
+          <tr>
+              <td>{{.CreatedAt}}</td>
+            <td>{{.FromAddress}}</td>
+            <td>{{.ToAddress}}</td>
+            <td>{{.Subject}}</td>
+            <td>{{.Status}}</td>
+          </tr>
+          {{end}}
+          {{end}}
+          </tbody>
+        </table>
+        </p>
       </div>
 
     </div><!-- /.container -->
@@ -72,5 +106,6 @@
     <script src="../../dist/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="../js/emailservice.js"></script>
   </body>
 </html>
