@@ -1,13 +1,13 @@
 # EmailService
 
 ## Setup
-    ```
+```
     $ go get github.com/sendgrid/sendgrid-go
     $ go get github.com/mailgun/mailgun-go
     $ go get github.com/satori/go.uuid
     $ go get goji.io
     $ make build
-    ```
+```
 ## Supported Email Providers
 
 SendGrid<br/>
@@ -21,8 +21,11 @@ MailGun
 
 The Email Service has a layered architecture.
 It contains a few static web pages, but mostly it is centered around the API.
-The API has a frontend component, which contains function calls to send emails, get a list of sent emails, a simple status function (for monitoring) and
-a simple call to retrieve some metrics.
+The API has a frontend component, which contains function calls to
+- send emails
+- get a list of sent emails
+- a simple status function (for monitoring)
+- a simple call to retrieve some metrics
 The most important/complex call is the sendMail call.
 After passing through the routing, which is done with the help of [goji.io](https://goji.io/), all calls are handled in the handler package,
 which is responsible for unmarshalling and marshalling of input and output values.
@@ -57,20 +60,20 @@ service to ensure confidentiality of the credentials.
 * **Data Params**
 
   **Required**
-    ```
+```
   	FromName       = [alphanumeric]
   	FromAddress    = [alphanumeric]
   	Subject        = [alphanumeric]
   	ToName         = [alphanumeric]
   	ToAddress      = [alphanumeric]
-  	```
+```
 <br/>
   	One or both of
 <br/>
-    ```
+```
   	BodyText       = [alphanumeric]
     BodyHtml       = [alphanumeric]
-    ```
+```
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -86,5 +89,7 @@ service to ensure confidentiality of the credentials.
 * **Sample Call:**
 
     on the local machine:
+```
     $ curl -H "Content-Type: application/json" -X POST -d '{"FromName":"Tester", "FromAddress":"test@testing.com", "ToName":"John", "ToAddress":"johnf43@gmx.net", "Subject":"Testmail", "BodyText":"This is a test mail from curl"}' http://localhost:8000/sendmail
+```
 
