@@ -2,10 +2,11 @@
 
 ## Setup
 
-> go get github.com/sendgrid/sendgrid-go
-> go get github.com/mailgun/mailgun-go
-> source config.sh
-> make build
+    $ go get github.com/sendgrid/sendgrid-go<br />
+    $ go get github.com/mailgun/mailgun-go<br />
+    $ go get github.com/satori/go.uuid<br />
+    $ go get goji.io<br />
+    $ make build<br />
 
 ## Supported Email Providers
 
@@ -14,14 +15,15 @@ MailGun
 
 ## Installation Notes
 
+> source config.sh<br />
+
 ## Architecture
 
 ## Security Considerations
 
 ## API Documentation
-[API](#api)
 ----
-**Send Email**
+###Send Email
 ----
   Send email via the supported email providers (html and/or text mail supported)
 
@@ -33,36 +35,25 @@ MailGun
 
   POST
 
-*  **URL Params**
-
-   <_If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._>
-
-   **Required:**
-
-   `id=[integer]`
-
-   **Optional:**
-
-   `photo_id=[alphanumeric]`
-
 * **Data Params**
 
   **Required**
 
-  	`FromName       = [alphanumeric]`
-  	`FromAddress    = [alphanumeric]`
-  	`Subject        = [alphanumeric]`
-  	`ToName         = [alphanumeric]`
-  	`ToAddress      = [alphanumeric]`
-
+  	`FromName       = [alphanumeric]`<br />
+  	`FromAddress    = [alphanumeric]`<br />
+  	`Subject        = [alphanumeric]`<br />
+  	`ToName         = [alphanumeric]`<br />
+  	`ToAddress      = [alphanumeric]`<br />
+<br />
   	One or both of
-  	`BodyText       = [alphanumeric]`
-    `BodyHtml       = [alphanumeric]`
+<br />
+  	`BodyText       = [alphanumeric]`<br />
+    `BodyHtml       = [alphanumeric]`<br />
 
 * **Success Response:**
 
   * **Code:** 200 <br />
-    **Content:** `OK`
+    **Content:** `OK`<br />
 
 * **Error Responses:**
 
@@ -73,4 +64,6 @@ MailGun
 
 * **Sample Call:**
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._>
+    on the local machine:
+    $ curl -H "Content-Type: application/json" -X POST -d '{"FromName":"Tester", "FromAddress":"test@testing.com", "ToName":"John", "ToAddress":"johnf43@gmx.net", "Subject":"Testmail", "BodyText":"This is a test mail from curl"}' http://localhost:8000/sendmail
+

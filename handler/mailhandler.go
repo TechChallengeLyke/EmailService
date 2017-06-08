@@ -45,5 +45,18 @@ func GetMailsWithStartingPoint(w http.ResponseWriter, r *http.Request) {
 }
 
 func getMails(w http.ResponseWriter, r *http.Request, from int) {
-	//TODO
+	numberStr := pat.Param(r, "number")
+	number, err := strconv.Atoi(numberStr)
+	if err != nil {
+		http.Error(w, "error : "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	mails := data.GetMails(from, number)
+
+	json, err := json.Marshal(mails)
+	if err != nil {
+		http.Error(w, "error : "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Write(json)
 }

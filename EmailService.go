@@ -42,7 +42,6 @@ func main() {
 	flag.Parse()
 	fmt.Printf("Starting with %v Workers\n", *numberOfWorkers)
 
-	//globalConfig.ProviderList
 	var err error
 	globalConfig.ProviderList, err = action.InitializeImplementations()
 	if err != nil {
@@ -51,15 +50,18 @@ func main() {
 	}
 
 	action.StartWorkers(globalConfig.ProviderList, *numberOfWorkers)
+
 	setupCleanupProcess()
 
-	//email := data.Email{Subject: "test subject"}
-	//action.SendMail(email)
+	setupRouting()
+}
 
+func setupRouting() {
 	mux := goji.NewMux()
 	mux.HandleFunc(pat.Post("/sendmail"), handler.SendMail)
 	mux.HandleFunc(pat.Get("/getmails/:number"), handler.GetMails)
 	mux.HandleFunc(pat.Get("/getmails/:number/:from"), handler.GetMailsWithStartingPoint)
+	mux.HandleFunc(pat.Get("/status"), func (w http.ResponseWriter, r *http.Request) {w.Write([]byte("OK"))})
 	mux.Handle(pat.Get("/*"), http.FileServer(http.Dir(filepath.Join(".", "public"))))
 	http.ListenAndServe("localhost:8000", mux)
 

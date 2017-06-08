@@ -1,6 +1,10 @@
 package data
 
-import "time"
+import (
+	"github.com/pkg/errors"
+	uuid "github.com/satori/go.uuid"
+	"time"
+)
 
 type Status string
 
@@ -23,15 +27,42 @@ type Email struct {
 	Status      Status    `json:"Status"`
 }
 
+var dataStore = []Email{}
+
+//THIS IS JUST TEST CODE
+//DON'T USE IN PRODUCTION
+//NOT THREAD-SAFE
+
 func (email *Email) Create() error {
 
 	email.Status = CREATED
-	email.MailID = "blabla"
+	email.MailID = uuid.NewV4().String()
 	email.CreatedAt = time.Now().UTC()
 
+	dataStore = append(dataStore, *email)
 	return nil
 }
 
 func (email *Email) Update() error {
-	return nil
+	for i, currentMail := range dataStore {
+		if currentMail.MailID == email.MailID {
+			dataStore[i] = *email
+			return nil
+		}
+	}
+	return errors.New("email " + email.MailID + " not found")
+}
+
+func GetMails(from int, number int) *[]Email {
+
+	mails := []Email{}
+
+	if len(dataStore) <= from {
+		return &mails
+	}
+
+	for i := from; i < len(dataStore) && i < from+number; i++ {
+		mails = append(mails, dataStore[i])
+	}
+	return &mails
 }
