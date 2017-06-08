@@ -3,6 +3,7 @@ package action
 import (
 	"fmt"
 	"github.com/TechChallengeLyke/EmailService/data"
+	"github.com/TechChallengeLyke/EmailService/provider"
 )
 
 //limit queue to 1000 emails
@@ -12,39 +13,44 @@ var (
 	quitAckChan = make(chan bool)
 )
 
-//persist mail and send it to the workers for processing
-func SendMail(email data.Email) {
+//check mail for completeness of data, persist mail and send it to the workers for processing
+func SendMail(email *data.Email) error {
 
-	err := email.Save()
+	err := CheckEmailData(email)
 	if err != nil {
-		//log error, but try to send it anyway
+		fmt.Printf("email data not complete : %v\n", err.Error())
+		return err
 	}
 
-	sendQueue <- email
+	err = email.Create()
+	if err != nil {
+		//since there is no emphasis on logging what happened with the mails:
+		//log error, but try to send it anyway
+		fmt.Printf("error during email.Create() : ", err.Error())
+	}
+
+	sendQueue <- *email
+	return nil
 }
 
 //start the specified number of workers(goroutines) and initialize their respective quit channels
-func StartWorkers(numberOfWorkers int) {
+func StartWorkers(providerList map[string]provider.EmailProvider, numberOfWorkers int) {
 
 	for i := 0; i < numberOfWorkers; i++ {
 		quitChans = append(quitChans, make(chan bool))
 
-		go func(quitChan chan bool) {
-			//go func(quitChan chan bool) {
-			fmt.Printf("Started anonymous goroutine\n")
+		go func(providerList map[string]provider.EmailProvider, quitChan chan bool) {
 
 			for {
 				select {
 				case email := <-sendQueue:
-					processEmail(email)
+					processEmail(providerList, email)
 				case <-quitChan:
-					fmt.Printf("Stopping anonymous goroutine \n")
 					quitAckChan <- true
 					return
 				}
 			}
-			fmt.Printf("anonymous goroutine stopped normally")
-		}(quitChans[i])
+		}(providerList, quitChans[i])
 
 	}
 
@@ -56,13 +62,9 @@ func StopWorkers() {
 
 	//send quit to all quit channels and wait for the ack from all workers to make sure, that they are finished with their current work
 	for i, _ := range quitChans {
-		fmt.Printf("Quitting channel %v \n", i)
+		fmt.Printf("Quitting worker %v \n", i)
 		quitChans[i] <- true
 		<-quitAckChan
 	}
-}
-
-func processEmail(email data.Email) {
-
-	fmt.Printf("Processing email: %v \n", email.Subject)
+	quitChans = []chan bool{}
 }
